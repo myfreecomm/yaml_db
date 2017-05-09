@@ -32,7 +32,9 @@ module YamlDb
 
       def load(filename, truncate = true)
         disable_logger
-        @loader.load(File.new(filename, "r"), truncate)
+        ActiveRecord::Base.connection.disable_referential_integrity do
+          @loader.load(File.new(filename, "r"), truncate)
+        end
         reenable_logger
       end
 
